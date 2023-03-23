@@ -1,0 +1,30 @@
+apiVersion: sealer.io/v2
+kind: Plugin
+metadata:
+  name: pre_init_host # Specify this plugin name,will dump in $rootfs/plugin dir.
+spec:
+  type: SHELL
+  action: pre-init-host
+  scope: node
+  data: |
+    set -e;set -x
+    bash scripts/pre_init_host.sh
+---
+apiVersion: sealer.aliyun.com/v1alpha1
+kind: Plugin
+metadata:
+  name: pre_init_host_master # Specify this plugin name,will dump in $rootfs/plugin dir.
+spec:
+  type: SHELL
+  action: pre-init-host
+  scope: master
+  data: |
+    set -e;set -x
+    bash scripts/pre_init_host.sh
+    
+    mkdir -p /etc/kubernetes/
+    cp -f statics/kube-scheduler-config.yaml /etc/kubernetes/kube-scheduler-config.yaml
+    cp -f scripts/push-to-registry.sh /usr/local/bin/push-to-registry.sh
+    chmod +x /usr/local/bin/push-to-registry.sh
+    cp -f scripts/etcdctl_v3.sh /usr/local/bin/etcdctl_v3
+    chmod +x /usr/local/bin/etcdctl_v3
