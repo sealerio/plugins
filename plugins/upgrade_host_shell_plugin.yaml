@@ -1,0 +1,16 @@
+apiVersion: sealer.io/v2
+kind: Plugin
+metadata:
+  name: upgrade_host # Specify this plugin name,will dump in $rootfs/plugin dir.
+spec:
+  type: SHELL
+  action: upgrade-host
+  scope: master|node
+  data: |
+    set -e;set -x
+    cp -f bin/seautil /usr/local/bin/seautil
+    chmod +x /usr/local/bin/seautil
+    cp -f bin/trident /usr/bin/trident
+    chmod +x /usr/bin/trident
+    cp -f bin/helm /usr/bin/helm
+    chmod +x /usr/bin/helm
